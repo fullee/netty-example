@@ -11,6 +11,9 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @ChannelHandler.Sharable
 public class HandlerServerMonitor extends ChannelInboundHandlerAdapter {
 
@@ -34,12 +37,21 @@ public class HandlerServerMonitor extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        super.channelActive(ctx);
+        Channel channel = ctx.channel();
+        System.out.println("客户端："+channel.remoteAddress()+"在线");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss SSS");
+
+        channel.writeAndFlush(Unpooled.copiedBuffer("服务器端发送消息：" + simpleDateFormat.format(new Date())+"\r\n", CharsetUtil.UTF_8));
+
+
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        super.channelInactive(ctx);
+        // 通道处于非活动状态时调用，此方法只会在通道建立时调用一次
+        Channel channel = ctx.channel();
+        System.out.println("客户端掉线："+channel.remoteAddress());
+
     }
 
     @Override
@@ -52,6 +64,8 @@ public class HandlerServerMonitor extends ChannelInboundHandlerAdapter {
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        super.handlerRemoved(ctx);
+        Channel channel = ctx.channel();
+        System.out.println("客户端断开："+channel.remoteAddress());
+        channels.remove(channel);
     }
 }
