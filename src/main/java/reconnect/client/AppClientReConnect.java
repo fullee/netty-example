@@ -18,10 +18,10 @@ import java.util.concurrent.TimeUnit;
 
 public class AppClientReConnect {
 
-    private int port;
-    private String host;
+    private final int port;
+    private final String host;
 
-    AppClientReConnect(String host, int port) {
+    public AppClientReConnect(String host, int port) {
         this.port = port;
         this.host = host;
     }
@@ -43,9 +43,13 @@ public class AppClientReConnect {
                         }
                     })
                     .remoteAddress(host, port);
-            ChannelFuture future = bootstrap.connect().sync();
+            // 1。 客户端端链接由同步阻塞改为异步阻塞
+            ChannelFuture future = bootstrap.connect();
             future.channel().writeAndFlush(Unpooled.copiedBuffer("你好服务器", CharsetUtil.UTF_8));
+            // 3。 在ChannelFuture实例中增加监听，添加第二步的监听类
+            future.addListener(new ReConnectListener(this));
 
+            // 循环发送数据包
             for (int i = 0; i < 60; i++) {
                 TimeUnit.SECONDS.sleep(3);
 //                TimeUnit.SECONDS.sleep(6);

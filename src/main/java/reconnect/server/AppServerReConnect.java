@@ -20,11 +20,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  *
  * 3）断线重连
  * 客户端处理：服务器端未启动或者崩溃，客户端应该不断重试，而不是直接退出。
- * 服务端处理：服务器检测到客户端断开，自动重连
  * 1。 客户端端链接由同步阻塞改为异步阻塞
  * 2。 创建监听类，实现ChannelFutureListener，在此类中发起重连
  * 3。 在ChannelFuture实例中增加监听，添加第二步的监听类
- *
+ * 服务端正常，但链路中断，自动重连
  *
  */
 public class AppServerReConnect {
