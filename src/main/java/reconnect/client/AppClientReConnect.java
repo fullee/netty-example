@@ -64,7 +64,7 @@ public class AppClientReConnect {
     }
 
     public static void main(String[] args) throws Exception{
-        new AppClientReConnect("127.0.0.1", 8090).run();
+        new AppClientReConnect("192.168.101.146", 8090).run();
     }
 
 }

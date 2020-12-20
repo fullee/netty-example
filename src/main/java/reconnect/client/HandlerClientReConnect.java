@@ -36,7 +36,7 @@ public class HandlerClientReConnect extends SimpleChannelInboundHandler<ByteBuf>
         System.out.println("与服务器链路中断" + channel.remoteAddress());
 
         // 服务端正常，但链路中断，自动重连
-        new AppClientReConnect("127.0.0.1", 8090).run();
+        new AppClientReConnect("192.168.101.146", 8090).run();
     }
 
     // 1）超时
